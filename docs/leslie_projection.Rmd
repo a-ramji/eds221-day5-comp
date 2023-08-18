@@ -124,11 +124,4 @@ demo_longer <- demo |>
 demo_longer
 ```
 
-## Testing out sourcing scripts
-
-```{r}
-source(here::here("src", "name_cart.R"))
-
-
-name_cart(food = "sushi", animal = "tuna")
-```
+## 

@@ -69,3 +69,17 @@ expect_type(mean_range(mtcars), "double")
 # we expect min to be <= max
 expect_true(mean_range(mtcars)[1] <= mean_range(mtcars)[2])
 ```
+
+## Testing out sourcing scripts
+
+```{r}
+source(here::here("src", "name_cart.R"))   
+
+name_cart(food = "sushi", animal = "tuna")
+```
+
+```{r}
+source(here::here("src", "cork_oak_growth.R")) 
+
+height_t2(4, 4, 10)
+```
