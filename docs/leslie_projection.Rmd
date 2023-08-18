@@ -55,29 +55,70 @@ Notes from class:
 
 # The line below creates a vector of time in years over the span of 8 years, including our initial state (0 years)
 time_yr <- seq(from = 0, to = 8, by = 1)
+# time_yr returns a sequence from 0 to 8 in increments of 1
 
-# The line below establishes a storage matrix with the initial population conditions (roe, fry, juvenille, adult) as columns, with the time sequence of years as the number of rows. 
+
+# The line below establishes an empty / storage matrix with the length of the vector of initial population conditions (roe, fry, juvenille, adult) as the number of columns, with the length of the time sequence of years as the number of rows. 
+# we can always check individual lengths of elements with length(time_yr) etc. 
 proj_year <- matrix(ncol = length(fish_year0), nrow = length(time_yr))
 
-# The line below it's filling the empty matrix with the first row as the initial population conditions
+
+# The line below is filling the empty matrix with the first row as the initial population conditions (because that's year 0!)
 proj_year[1, ] <- fish_year0
 
+
 # The for loop below starts after year 0 (the 1st position/element in the time_yr vector) because we already have our initial population structure. This for loop then iterates through the years, populating the proj_year matrix by row, given the starting conditions, then the population structure for the previous year (i - 1) 
+# proj_year[i-1,] returns the vector containing the population structure data of the previous (time) cycle (previous row to the one you're filling)
+# each iteration populates a new row
+
 for (i in 2:length(time_yr)) {
   proj_year[i,] <- fish_leslie %*% proj_year[i-1,]
 }
 
 
 # The rest is wrangling & visualization (run to check it out):
-colnames(proj_year) <- c("eggs", "fry", "juvenile", "adult")
+# reassigns the column names of the matrix to be more meaningful, also useful in plotting 
+colnames(proj_year) <- c("roe", "fry", "juvenile", "adult")
 
+# binding together the values in our matrix with our time_yr vector into a data frame (now we have column names, and years as column 1 values)
 proj_df <- data.frame(time_yr, proj_year) %>% 
+  # excludes time_yr column -- we could also have written cols = c("eggs", "fry", "juvenille", "adult")
+  # values given the name "stage population"
   pivot_longer(cols = -time_yr, names_to = "lifestage", values_to = "stage_population")
 
 ggplot(data = proj_df, aes(x = time_yr, y = stage_population)) +
   geom_line(aes(color = lifestage)) +
+  # adds log scaling because the scales are very different
   scale_y_log10()
 
 ```
 
 Test different combinations of survival / reproduction and starting population structures to see what happens!
+
+```{r}
+demo <- data.frame(year = c(1995, 2000, 2005), 
+                  cats = c(2, 4, 6),
+                  dogs = c(10, 14, 12))
+
+demo
+```
+
+```{r}
+ggplot(data = demo) +
+  geom_line(aes(x = year, y = cats)) +
+  geom_line(aes(x = year, y = dogs))
+
+# this is more tedious than asking it to recognize multiple groups as single variables
+
+# we want a single column for each variable
+```
+
+```{r}
+demo_longer <- demo |> 
+  # take column names, put them into one value
+  # name the column that they get melted into 
+  # name what the values column is
+  pivot_longer(cols = c(cats, dogs), names_to = "species", values_to = "count")
+  
+demo_longer
+```
