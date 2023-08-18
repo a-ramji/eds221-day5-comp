@@ -6,6 +6,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+
 ```
 
 A population of fish we're interested in has four life stages: eggs (E), fry (F), juvenile (J), breeding adult (A). You are told that annually:
@@ -121,4 +122,13 @@ demo_longer <- demo |>
   pivot_longer(cols = c(cats, dogs), names_to = "species", values_to = "count")
   
 demo_longer
+```
+
+## Testing out sourcing scripts
+
+```{r}
+source(here::here("src", "name_cart.R"))
+
+
+name_cart(food = "sushi", animal = "tuna")
 ```
