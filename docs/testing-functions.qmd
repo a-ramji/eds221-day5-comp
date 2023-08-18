@@ -1,0 +1,71 @@
+---
+title: "testing functions"
+format: html
+editor: visual
+---
+
+## Set up
+
+```{r}
+library(tidyverse)
+library(devtools)
+library(remotes)
+library(testthat)
+```
+
+## Making a function
+
+-   write a function that...
+
+-   calculate means
+
+-   return range that tells you the max and min means calculated across columns
+
+```{r}
+mean_range <- function(df) {
+  col_means <- apply(X = df, MARGIN = 2, FUN  = mean, na.rm = TRUE)
+  col_mean_max <- max(col_means)
+  col_mean_min <- min(col_means)
+  # using return and c() here lets us return both values in a single line (as a vector)
+  return(c(col_mean_min, col_mean_max))
+  
+}
+
+```
+
+```{r}
+mean_range(mtcars)
+```
+
+```{r}
+mean_range(faithful)
+```
+
+## Testing our function
+
+using testthat()
+
+### Unit Test
+
+-   expected length = 2
+
+-   expected type is
+
+-   expect min \<= max
+
+-   expected class is numeric
+
+```{r}
+# if we run this line and nothing happens, that means the function is working as expected
+expect_length(mean_range(mtcars), 2)
+```
+
+```{r}
+# we expect the type of our output to be double
+expect_type(mean_range(mtcars), "double")
+```
+
+```{r}
+# we expect min to be <= max
+expect_true(mean_range(mtcars)[1] <= mean_range(mtcars)[2])
+```
