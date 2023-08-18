@@ -35,7 +35,17 @@ The initial population structure is given by:
 fish_year0 <- c(5000, 8000, 600, 400)
 ```
 
+-   take the dot product of the Leslie matrix and the initial population structure to get the following year's population structure
+
+-   dot product of matrix and population structure at i-th time cycle
+
 Add line-by-line comments wheres prompted in the code below, explaining what each is doing. Make sure that you are talking with your neighbors about what is really being created at each step.
+
+Notes from class:
+
+-   propagation ...?
+
+-   initial pop structure & conditions state that those proportions are the only way that eggs, fry, etc. exist -- also based on the previous year's population
 
 ```{r}
 # Model projections
@@ -43,16 +53,16 @@ Add line-by-line comments wheres prompted in the code below, explaining what eac
 # ------ WHAT HAPPENS HERE? ------ #
 # ------ comment line-by-line ---- #
 
-# The line below...
+# The line below creates a vector of time in years over the span of 8 years, including our initial state (0 years)
 time_yr <- seq(from = 0, to = 8, by = 1)
 
-# The line below...
+# The line below establishes a storage matrix with the initial population conditions (roe, fry, juvenille, adult) as columns, with the time sequence of years as the number of rows. 
 proj_year <- matrix(ncol = length(fish_year0), nrow = length(time_yr))
 
-# The line below...
+# The line below it's filling the empty matrix with the first row as the initial population conditions
 proj_year[1, ] <- fish_year0
 
-# The for loop below...
+# The for loop below starts after year 0 (the 1st position/element in the time_yr vector) because we already have our initial population structure. This for loop then iterates through the years, populating the proj_year matrix by row, given the starting conditions, then the population structure for the previous year (i - 1) 
 for (i in 2:length(time_yr)) {
   proj_year[i,] <- fish_leslie %*% proj_year[i-1,]
 }
